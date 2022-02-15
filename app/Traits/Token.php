@@ -29,4 +29,25 @@ trait Token
             'expires_at' => now()->addSecond($access_token['expires_in']),
         ]);
     }
+
+    public function refreshToken()
+    {
+        $response = Http::withHeaders([
+            'Accept' => 'application/json',
+            'Content-Type' => 'application/json'
+        ])->post('http://127.0.0.1:8000/oauth/token', [
+            'grant_type' => 'refresh_token',
+            'client_id' => config('services.server.client_id'),
+            'client_secret' => config('services.server.client_secret'),
+            'refresh_token' => auth()->user()->accessToken->refresh_token,
+        ]);
+
+        $access_token = $response->json();
+
+        auth()->user()->accessToken->update([
+            'access_token' => $access_token['access_token'],
+            'refresh_token' => $access_token['refresh_token'],
+            'expires_at' => now()->addSecond($access_token['expires_in']),
+        ]);
+    }
 }

@@ -7,8 +7,12 @@ use Illuminate\Support\Facades\Http;
 
 class PostController extends Controller
 {
+
+
     public function store()
     {
+        $this->resolveAuthorization();
+
         $response = Http::withHeaders([
             'Accept' => 'application/json',
             'Content-Type' => 'application/json',
