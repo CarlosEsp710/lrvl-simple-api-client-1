@@ -33,6 +33,6 @@ class User extends Authenticatable
 
     public function accessToken()
     {
-        return $this->hasOne(User::class);
+        return $this->hasOne(AccessToken::class);
     }
 }
